@@ -1,9 +1,13 @@
+
+
+import FileUpload from "@/components/FileUpload";
 import { Button } from "@/components/ui/button";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { ArrowRight, FileStack, Globe, GraduationCap, LogIn, MessageSquareQuote, Microscope, NotepadText } from "lucide-react";
 import Image from "next/image";
-import { motion } from "framer-motion"
+import Link from "next/link";
+
 
 
 export default async function Home() {
@@ -16,17 +20,15 @@ export default async function Home() {
 
       <section className="flex flex-col justify-center items-center mt-10 space-y-5 z-10" >
         <div className="flex flex-col justify-center items-center space-y-4" >
-          <motion.div initial={{ x: -50 }} animate={{ x: 0 }} transition={{
-            type: "spring", stiffness: 120
-          }} className="flex justify-center items-center gap-2" >
+          <div className="flex justify-center items-center gap-2">
             <h1 className="text-4xl max-sm:text-2xl text-black font-bold " >PDFs that Talk Back!</h1>
             <UserButton afterSignOutUrl="/" />
-          </motion.div>
+          </div>
           {!isAuth ? <div className="max-sm:flex-col flex justify-center items-center gap-2" >
             <Button className="h-8 font-semibold " >Go to chats <span>
               <ArrowRight className="w-5 h-5 pl-1" /></span> </Button>
             <Button className="h-8 font-semibold " variant="secondary" >manage Subscriptions</Button>
-          </div> : <Button className="flex justify-center items-center gap-2" > Login to get started <span><LogIn className="w-4 h-4" /></span></Button>}
+          </div> : <Link href="/sign-in" > <Button className="flex justify-center items-center gap-2" > Login to get started <span><LogIn className="w-4 h-4" /></span></Button></Link>}
         </div>
         <div className="text-lg max-w-[90%] sm:max-w-[50%] ">
           <p className="text-center" >Engage with your PDFs like never before. Ask questions, get instant answers, and transform your documents into interactive dialogues. Streamline your workflow with <span className="font-bold text-xl blue_gradient" >DocTalk</span>.
@@ -34,10 +36,10 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="flex flex-col justify-center items-center w-full " >
-        {!isAuth && <h1>FileUploadComponent</h1>}
+      <section className="flex flex-col justify-center items-center w-full z-10 " >
+        {!isAuth && <FileUpload/>}
 
-        <div className=" w-[70%] flex justify-center items-center" >
+        <div className=" w-[70%] flex justify-center items-center mt-10" >
           <Image src="/demo.png " width={800} height={600} alt="demo" />
         </div>
       </section>
