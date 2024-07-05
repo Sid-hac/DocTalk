@@ -44,7 +44,9 @@ const FileUpload = () => {
                         toast.error("Error uploading")
                     },
                     onSuccess: (data) => {
-                        toast.success( data.message)
+                        // toast.success( data.message)
+                        console.log(data);
+                        
                     }
                 })
 
