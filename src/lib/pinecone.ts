@@ -1,4 +1,4 @@
-import { Pinecone } from '@pinecone-database/pinecone';
+import { Pinecone, PineconeRecord } from '@pinecone-database/pinecone';
 import { downloadFromS3 } from './s3-server';
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf'
 import { Document, RecursiveCharacterTextSplitter } from "@pinecone-database/doc-splitter"
@@ -8,9 +8,6 @@ import { Vector } from '@pinecone-database/pinecone/dist/pinecone-generated-ts-f
 import { convertToAscii } from './utils';
 
 
-export const pinecone = new Pinecone({
-    apiKey: process.env.PINECONE_API_KEY!,
-});
 
 type PDFPage = {
     pageContent: string,
@@ -37,15 +34,37 @@ export const loadS3IntoPinecone = async (fileKey: string) => {
     // split and segment the pdf
     const docs = await Promise.all(pages.map(prepareDocument))
 
+    console.log(docs);
+
+
     // vectorise and embed indivisual docunemts
     const vectors = await Promise.all(docs.flat().map(embedDocument))
+    console.log(vectors);
+
 
     // upload to pinecone
+
+    const pinecone = new Pinecone({
+        apiKey: process.env.PINECONE_API_KEY!,
+    });
+
     const index = pinecone.Index("doctalk-pdf")
 
-    // const namespace = convertToAscii(fileKey)
+    try {
+        // const namespace = index.namespace(convertToAscii(fileKey));
+        const validVectors = vectors.filter((vector): vector is PineconeRecord => vector !== undefined);
 
-    await index.upsert(vectors)
+        console.log("inserting vectors into db");
+        const ns = pinecone.index("doctalk-pdf").namespace(convertToAscii(fileKey))
+        await ns.upsert(validVectors)
+
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+
+    return docs[0]
+
 }
 
 const embedDocument = async (doc: Document) => {
@@ -56,13 +75,12 @@ const embedDocument = async (doc: Document) => {
 
         return {
             id: hash,
-            values: embeddings,
+            values: embeddings.values,
             metadata: {
                 pageNumber: doc.metadata.pageNumber,
                 text: doc.metadata.text,
-
             }
-        } as Vector
+        } as PineconeRecord
     } catch (error) {
         console.log(error);
 

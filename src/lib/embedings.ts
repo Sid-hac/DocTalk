@@ -1,25 +1,48 @@
-import {OpenAIApi , Configuration} from "openai-edge"
+// import {OpenAIApi , Configuration} from "openai-edge"
 
-const config = new Configuration({
-    apiKey :  process.env.OPENAI_API_KEY,
-})
 
-const openAi = new OpenAIApi(config)
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export const getEmbeddings = async(text : string) => {
+// Access your API key as an environment variable (see "Set up your API key" above)
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY!);
+
+export async function getEmbeddings(text : string) {
+  // For embeddings, use the embedding-001 model
+  const model = genAI.getGenerativeModel({ model: "embedding-001"});
+  text = text.replace(/\n/g , ' ')
+  const result = await model.embedContent(text);
+  
+  return result.embedding;
+
+}
+
+
+
+
+
+// const config = new Configuration({
+//     apiKey :  process.env.OPENAI_API_KEY,
+// })
+
+// const openAi = new OpenAIApi(config)
+
+// export const getEmbeddings = async(text : string) => {
      
-    try {
-        const res = await openAi.createEmbedding({
-            model : 'text-embedding-ada-002',
-            input : text.replace(/\n/g , ' ')
-        })
+//     try {
+//         const res = await openAi.createEmbedding({
+//             model : 'text-embedding-ada-002',
+//             input : text.replace(/\n/g , ' ')
+//         })
+        
 
-        const result = await res.json()
-        return result.data[0].embedding as number[]
+//         const result = await res.json()
+//         console.log(result);
         
-    } catch (error) {
-        console.log(error);
-        throw new Error("error creating embeddings")
+//         return result.data[0].embedding as number[]
         
-    }
-} 
+//     } catch (error) {
+//         console.log(error);
+//         throw new Error("error creating embeddings")
+        
+//     }
+// } 

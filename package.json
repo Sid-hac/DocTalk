@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.1.6",
+    "@google/generative-ai": "^0.14.1",
     "@langchain/community": "^0.2.17",
     "@neondatabase/serverless": "^0.9.4",
     "@pinecone-database/doc-splitter": "^0.0.1",
