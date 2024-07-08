@@ -9,8 +9,12 @@ import toast from "react-hot-toast"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
-const FileUpload = () => {
-    
+type Props = {
+    classname:string; 
+}
+
+const FileUpload = ({classname} : Props) => {
+
     const router = useRouter()
     const [uploading, setUploading] = useState(false)
 
@@ -45,10 +49,10 @@ const FileUpload = () => {
                     onError: (error) => {
                         toast.error("Error uploading")
                     },
-                    onSuccess: ({chat_id}) => {
+                    onSuccess: ({ chat_id }) => {
                         toast.success("chat created")
                         router.push(`/chat/${chat_id}`)
-                        
+
                     }
                 })
 
@@ -63,24 +67,24 @@ const FileUpload = () => {
     })
 
     return (
-        <div className="p-2 bg-white rounded-xl w-[50%] " >
+        <div className={`p-2 bg-white rounded-xl ${classname} `} >
             <div {...getRootProps({
                 className: "border-2 border-dashed rounded-xl cursor-pointer bg-gray-50 py-8 flex justify-center items-center flex-col h-40"
             })} >
-                <input {...getInputProps()} />
+                <input {...getInputProps()} className="w-full" />
                 {(uploading || isPending) ? (
                     <>
-                    <Loader2 className="w-10 h-10 text-blue-400 animate-spin " />
-                    <p className="mt-2 text-sm text-slate-400" >Spilling tea to GPT....</p>
+                        <Loader2 className="w-10 h-10 text-blue-400 animate-spin " />
+                        <p className="mt-2 text-sm text-slate-400" >Spilling tea to GPT....</p>
                     </>
 
-                ): (
+                ) : (
                     <>
-                    <Inbox className="text-blue-600 w-10 h-10 " />
-                    <p className="mt-2 text-sm text-slate-400" > Drop PDF here</p>
-                </>
+                        <Inbox className="text-blue-600 w-10 h-10 " />
+                        <p className="mt-2 text-sm text-slate-400 " > Drop PDF here</p>
+                    </>
                 )}
-                
+
             </div>
         </div>
     )

@@ -37,7 +37,7 @@ export default async function Home() {
       </section>
 
       <section className="flex flex-col justify-center items-center w-full z-10 " >
-        {!isAuth && <FileUpload/>}
+        {!isAuth && <FileUpload classname="w-[50%]" />}
 
         <div className=" w-[70%] flex justify-center items-center mt-10" >
           <Image src="/demo.png " width={800} height={600} alt="demo" />

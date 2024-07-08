@@ -100,3 +100,32 @@
   .green_gradient {
     @apply bg-gradient-to-r from-green-400 to-green-500 bg-clip-text text-transparent;
   }
+
+  
+  div  {
+  --sb-track-color: #99a4a9;
+  --sb-thumb-color: #3a57f7;
+  --sb-size: 2px;
+}
+
+div ::-webkit-scrollbar {
+  width: var(--sb-size)
+}
+
+div ::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 8px;
+}
+
+div ::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 4px;
+  
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  div  {
+    scrollbar-color: var(--sb-thumb-color)
+                     var(--sb-track-color);
+  }
+}

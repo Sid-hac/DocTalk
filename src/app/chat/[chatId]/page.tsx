@@ -1,3 +1,5 @@
+import ChatSidebar from "@/components/ChatSidebar"
+import PdfViewer from "@/components/PdfViewer"
 import { db } from "@/lib/db"
 import { chats } from "@/lib/db/schema"
 import { auth } from "@clerk/nextjs/server"
@@ -24,15 +26,15 @@ const ChatPage = async({params :{ chatId}}: Props) => {
     const chat = _chats.find(c => c.id === parseInt(chatId))
 
   return (
-    <div className="flex max-h-screen overflow-scroll" >
-        <div className="flex w-full max-h-screen overflow-scroll" >
-            <div className="flex-[1] max-w-xs  " >
-                {/* <ChatSidebar/> */}
+    <div className="flex max-h-screen " >
+        <div className="flex w-full max-h-screen marker:" >
+            <div className="flex-[2] max-w-xs  overflow-y-scroll" >
+                <ChatSidebar chats={_chats} chatId={parseInt(chatId)} />
             </div>
-            <div className="max-h-screen p-4 overflow-scroll flex-[5]" >
-                {/* <PdfViewer/> */}
+            <div className="max-h-screen p-4 overflow-y-scroll  flex-[5]" >
+                <PdfViewer pdf_url={chat?.pdfUrl!} />
             </div>
-            <div className="flex-[3] border-l-4 border-l-slate-200  " >
+            <div className="flex-[3] border-l-4 border-l-slate-200 overflow-y-scroll " >
                 {/* <ChatComponent/> */}
             </div>
         </div>
