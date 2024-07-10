@@ -38,9 +38,10 @@ const ChatSidebar = ({ chats, chatId }: Props) => {
       </Dialog>
 
       <div className="flex flex-col gap-2 mt-2" >
+        {chats.length === 0 && <p className="text-sm text-muted-foreground text-center" > Nothing to show here </p>}
         {chats.map((chat, index) => (
           <Link href={`/chat/${chat.id}`} key={index} >
-            <div className={cn("flex gap-2 items-center p-2 rounded-xl" , {
+            <div className={cn("flex gap-2 items-center p-2 rounded-xl bg-gray-800" , {
               "bg-blue-600 text-white" : chat.id === chatId,
 
             })} >
