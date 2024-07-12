@@ -2,19 +2,43 @@
 
 import { DrizzleChat } from "@/lib/db/schema"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
-import { MessageCircle, PlusCircle } from "lucide-react"
+import { Loader, MessageCircle, PlusCircle } from "lucide-react"
 import FileUpload from "./FileUpload"
 import { Button } from "./ui/button"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { useState } from "react"
+import axios from "axios"
+import { redirect } from "next/navigation"
+import SubscribeButton from "./SubscribeButton"
 
 
 type Props = {
   chats: DrizzleChat[],
-  chatId: number
+  chatId: number,
+  isPro : boolean
 }
 
-const ChatSidebar = ({ chats, chatId }: Props) => {
+const ChatSidebar = ({ chats, chatId , isPro }: Props) => {
+
+  const [loading, setLoading] = useState(false)
+   
+  const handleSubscription = async () => {
+
+    try {
+      setLoading(true)
+
+      const response = await axios.get("/api/stripe")
+      // redirect(response.data.url)
+      window.location.href = response.data.url
+
+    } catch (error) {
+
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="w-full h-screen p-4 text-gray-200 bg-gray-900" >
       <Dialog>
@@ -31,7 +55,7 @@ const ChatSidebar = ({ chats, chatId }: Props) => {
             </DialogDescription>
             <p className="text-center text-muted-foreground text-sm font-semibold " >Only PDFs are available in free plan</p>
             <Link href="/upgrade" >
-              <Button className="font-bold w-full" >Upgrade</Button>
+              <Button className="font-bold w-full" onClick={handleSubscription} >Upgrade</Button>
             </Link>
           </DialogHeader>
         </DialogContent>
@@ -41,11 +65,11 @@ const ChatSidebar = ({ chats, chatId }: Props) => {
         {chats.length === 0 && <p className="text-sm text-muted-foreground text-center" > Nothing to show here </p>}
         {chats.map((chat, index) => (
           <Link href={`/chat/${chat.id}`} key={index} >
-            <div className={cn("flex gap-2 items-center p-2 rounded-xl bg-gray-800" , {
-              "bg-blue-600 text-white" : chat.id === chatId,
+            <div className={cn("flex gap-2 items-center p-2 rounded-xl bg-gray-800", {
+              "bg-blue-600 text-white": chat.id === chatId,
 
             })} >
-              <MessageCircle className="w-6 h-6"  />
+              <MessageCircle className="w-6 h-6" />
               <p className="text-sm w-full overflow-hidden truncate whitespace-nowrap text-ellipsis" >{chat.pdfName}</p>
             </div>
           </Link>
@@ -53,11 +77,13 @@ const ChatSidebar = ({ chats, chatId }: Props) => {
 
       </div>
 
-      <div className="absolute bottom-4 left-4" >
+      <div className=" flex justify-center items-end gap-2 absolute bottom-4 left-4" >
+        <SubscribeButton isPro= {isPro} />
         <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap" >
           <Link href="/" >Home</Link>
           <Link href="/" >Source</Link>
         </div>
+
       </div>
 
 

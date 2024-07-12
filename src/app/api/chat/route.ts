@@ -89,7 +89,7 @@ import { streamText, StreamingTextResponse, StreamData, Message } from 'ai';
 import { google } from '@ai-sdk/google';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { chats } from '@/lib/db/schema';
+import { chats, messages as _messages } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { getContext } from '@/lib/context';
 import { FileKey } from 'lucide-react';
@@ -101,7 +101,7 @@ const model = google('models/gemini-1.5-flash-latest', {
 
 export const POST = async (req: Request) => {
   try {
-    const { messages, chatId } = await req.json();
+    const { messages , chatId } = await req.json();
 
     const _chats = await db.select().from(chats).where(eq(chats.id, chatId));
 
@@ -111,7 +111,7 @@ export const POST = async (req: Request) => {
       });
     }
     const filekey = _chats[0].fileKey;
-    const lastMessage = messages[messages.length - 1]
+    const lastMessage = messages[messages.length - 1];
 
     const context = await getContext(lastMessage.content , filekey)
 
@@ -137,10 +137,10 @@ export const POST = async (req: Request) => {
     // Generate a streaming response using Google's Generative AI
     const result = await streamText({
       model,
-      messages: {
+      messages: [
         prompt,
         ...messages.filter((message : Message ) => message.role === 'user')
-      }
+      ]
     });
 
     // Create a StreamData instance
@@ -150,6 +150,24 @@ export const POST = async (req: Request) => {
     // Return a StreamingTextResponse that combines the result stream with the data stream
     return new StreamingTextResponse(
       result.toAIStream({
+        onStart : async() => {
+           // save user message into database
+           await db.insert(_messages).values({
+             chatId,
+             content : lastMessage.content,
+             role : "user"
+           })
+
+        },
+        onCompletion : async(completion) => {
+          // save AI response into database
+          await db.insert(_messages).values({
+            chatId,
+            content : completion ,
+            role : "system"
+          })
+
+        },
         onFinal() {
           data.append('call completed');
           data.close();
@@ -167,8 +185,7 @@ export const POST = async (req: Request) => {
   } catch (error) {
     console.error(error);
     return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      status: 500
     });
   }
 };

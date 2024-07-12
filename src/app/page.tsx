@@ -1,48 +1,76 @@
 
 
+import Features from "@/components/Features";
 import FileUpload from "@/components/FileUpload";
+import Process from "@/components/Process";
+import SubscribeButton from "@/components/SubscribeButton";
 import { Button } from "@/components/ui/button";
+import { db } from "@/lib/db";
+import { chats } from "@/lib/db/schema";
+import { checkSubscription } from "@/lib/subscription";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import { eq } from "drizzle-orm";
 import { ArrowRight, FileStack, Globe, GraduationCap, LogIn, MessageSquareQuote, Microscope, NotepadText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 
 
 export default async function Home() {
 
-  const { userId } = await auth();
+  const { userId } = auth();
   const isAuth = !userId
+  const isPro = await checkSubscription()
+
+  let firstChat;
+  if (userId) {
+    firstChat = await db.select().from(chats).where(eq(chats.userId, userId))
+    firstChat = firstChat[0]
+  }
 
   return (
-    <div className=" relative flex flex-col justify-center items-start min-w-screen min-h-screen space-y-5 bg-blue-100  "  >
+    <div className=" relative flex flex-col justify-center items-start min-w-screen min-h-screen space-y-10 bg-blue-50"  >
+      <div className="w-full h-fit bg-gradient-to-r from-indigo-500 to-fuchsia-500 z-10" >
 
-      <section className="flex flex-col justify-center items-center mt-10 space-y-5 z-10" >
-        <div className="flex flex-col justify-center items-center space-y-4" >
-          <div className="flex justify-center items-center gap-2">
-            <h1 className="text-4xl max-sm:text-2xl text-black font-bold " >PDFs that Talk Back!</h1>
-            <UserButton afterSignOutUrl="/" />
+
+        <section className="flex flex-col justify-center items-center mt-10 space-y-5  " >
+          <div className="flex flex-col justify-center items-center space-y-4" >
+            <div className="flex justify-center items-center gap-2">
+              <h1 className="text-4xl max-sm:text-2xl text-black font-bold " >PDFs that Talk Back!</h1>
+              <UserButton afterSignOutUrl="/" />
+            </div>
+            {!isAuth ? <div className="max-sm:flex-col flex justify-center items-center gap-2" >
+              {firstChat ? <Link href={`/chat/${firstChat?.id}`} >
+                <Button className="h-8 font-semibold " >
+                  Go to chats
+                  <span>
+                    <ArrowRight className="w-5 h-5 pl-1" />
+                  </span>
+                </Button>
+              </Link> : toast("Use Uploader to create first chat")}
+
+              <SubscribeButton isPro={isPro} />
+            </div> : <Link href="/sign-in" > <Button className="flex justify-center items-center gap-2" > Login to get started <span><LogIn className="w-4 h-4" /></span></Button></Link>}
           </div>
-          {!isAuth ? <div className="max-sm:flex-col flex justify-center items-center gap-2" >
-            <Button className="h-8 font-semibold " >Go to chats <span>
-              <ArrowRight className="w-5 h-5 pl-1" /></span> </Button>
-            <Button className="h-8 font-semibold " variant="secondary" >manage Subscriptions</Button>
-          </div> : <Link href="/sign-in" > <Button className="flex justify-center items-center gap-2" > Login to get started <span><LogIn className="w-4 h-4" /></span></Button></Link>}
-        </div>
-        <div className="text-lg max-w-[90%] sm:max-w-[50%] ">
-          <p className="text-center" >Engage with your PDFs like never before. Ask questions, get instant answers, and transform your documents into interactive dialogues. Streamline your workflow with <span className="font-bold text-xl blue_gradient" >DocTalk</span>.
-          </p>
-        </div>
-      </section>
+          <div className="text-lg max-w-[90%] sm:max-w-[50%] ">
+            <p className="text-center" >Engage with your PDFs like never before. Ask questions, get instant answers, and transform your documents into interactive dialogues. Streamline your workflow with <span className="font-bold text-xl blue_gradient" >DocTalk</span>.
+            </p>
+          </div>
+        </section>
 
-      <section className="flex flex-col justify-center items-center w-full z-10 " >
-        {!isAuth && <FileUpload classname="w-[50%]" />}
+        <section className="flex flex-col justify-center items-center w-full z-10 space-y-10 mt-10" >
+          {!isAuth && <FileUpload classname="w-[50%]" />}
 
-        <div className=" w-[70%] flex justify-center items-center mt-10" >
-          <Image src="/demo.png " width={800} height={600} alt="demo" />
-        </div>
-      </section>
+          <div className="mt-10 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:rounded-2xl sm:m-4" >
+            <Image src="/highlight.png " width={900} height={600} quality={100} alt="demo" className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10" />
+          </div>
+        </section>
+      </div>
+
+      <Process/>
+      <Features isAuth = {isAuth} firstChatId = {firstChat?.id} />
 
       <section className="flex flex-col justify-center items-center sm:m-20 space-y-5 z-10">
 
@@ -86,7 +114,8 @@ export default async function Home() {
       <div className="absolute z-[0] w-[20%] h-[20%]  right-20 top-0  white__gradient" />
       <div className="absolute z-[0] w-[20%] h-[20%]  left-0 bottom-0 white__gradient" />
       <div className="absolute z-[0] w-[20%] h-[20%] right-0 top-0 pink__gradient" />
-      <div className="absolute z-[0] w-[30%] h-[40%] right-0 bottom-0 blue__gradient" />
+      <div className="absolute z-[0] w-[10%] h-[16%] left-0 bottom-36  pink__gradient" />
+      <div className="absolute z-[0] w-[30%] h-[30%] right-0 bottom-0 blue__gradient" />
     </div>
   );
 }

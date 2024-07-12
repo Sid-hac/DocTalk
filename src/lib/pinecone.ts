@@ -22,7 +22,6 @@ export const loadS3IntoPinecone = async (fileKey: string) => {
     //   obtain the pdf
     console.log('downloading file from s3');
     const file_name = await downloadFromS3(fileKey)
-    console.log(file_name);
 
     if (!file_name) {
         throw new Error('could not download file from s3');
@@ -34,12 +33,10 @@ export const loadS3IntoPinecone = async (fileKey: string) => {
     // split and segment the pdf
     const docs = await Promise.all(pages.map(prepareDocument))
 
-    console.log(docs);
 
 
     // vectorise and embed indivisual docunemts
     const vectors = await Promise.all(docs.flat().map(embedDocument))
-    console.log(vectors);
 
 
     // upload to pinecone
