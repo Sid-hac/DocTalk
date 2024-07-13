@@ -15,7 +15,7 @@ type Props = {
 const Features = ({ isAuth, firstChatId }: Props) => {
     return (
 
-        <section className="mb-10  w-full h-fit bg-gradient-to-b from-slate-200 to-slate-50 z-10 px-3 md:px-20" >
+        <section className="mb-10 py-10  w-full h-fit bg-gradient-to-b from-slate-200 to-slate-50 z-10 px-3 md:px-20" >
             <div className="flex justify-center items-center mt-20 " >
                 <h1 className=" text-2xl md:text-4xl lg:text-6xl font-bold" >Talk to PDFs  <span className="text text-blue-700" >with AI</span> </h1>
             </div>
