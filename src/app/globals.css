@@ -147,8 +147,8 @@
 
 div {
   --sb-track-color: #99a4a9;
-  --sb-thumb-color: #3a57f7;
-  --sb-size: 2px;
+  --sb-thumb-color: #f3f056;
+  --sb-size: 0px;
 }
 
 div ::-webkit-scrollbar {
@@ -157,12 +157,12 @@ div ::-webkit-scrollbar {
 
 div ::-webkit-scrollbar-track {
   background: var(--sb-track-color);
-  border-radius: 8px;
+  border-radius: 0px;
 }
 
 div ::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
-  border-radius: 4px;
+  border-radius: 0px;
 
 }
 

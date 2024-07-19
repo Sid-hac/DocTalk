@@ -16,13 +16,13 @@ import SubscribeButton from "./SubscribeButton"
 type Props = {
   chats: DrizzleChat[],
   chatId: number,
-  isPro : boolean
+  isPro: boolean
 }
 
-const ChatSidebar = ({ chats, chatId , isPro }: Props) => {
+const ChatSidebar = ({ chats, chatId, isPro }: Props) => {
 
   const [loading, setLoading] = useState(false)
-   
+
   const handleSubscription = async () => {
 
     try {
@@ -54,9 +54,9 @@ const ChatSidebar = ({ chats, chatId , isPro }: Props) => {
 
             </DialogDescription>
             <p className="text-center text-muted-foreground text-sm font-semibold " >Only PDFs are available in free plan</p>
-            <Link href="/upgrade" >
-              <Button className="font-bold w-full" onClick={handleSubscription} >Upgrade</Button>
-            </Link>
+
+            <SubscribeButton isPro={isPro} />
+
           </DialogHeader>
         </DialogContent>
       </Dialog>
@@ -78,7 +78,7 @@ const ChatSidebar = ({ chats, chatId , isPro }: Props) => {
       </div>
 
       <div className=" flex justify-center items-end gap-2 absolute bottom-4 left-4" >
-        <SubscribeButton isPro= {isPro} />
+        <SubscribeButton isPro={isPro} />
         <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap" >
           <Link href="/" >Home</Link>
           <Link href="/" >Source</Link>
