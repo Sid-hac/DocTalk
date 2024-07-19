@@ -54,14 +54,12 @@ const ChatSidebar = ({ chats, chatId, isPro }: Props) => {
 
             </DialogDescription>
             <p className="text-center text-muted-foreground text-sm font-semibold " >Only PDFs are available in free plan</p>
-
             <SubscribeButton isPro={isPro} />
-
           </DialogHeader>
         </DialogContent>
       </Dialog>
 
-      <div className="flex flex-col gap-2 mt-2" >
+      <div className="flex flex-col gap-2 mt-2">
         {chats.length === 0 && <p className="text-sm text-muted-foreground text-center" > Nothing to show here </p>}
         {chats.map((chat, index) => (
           <Link href={`/chat/${chat.id}`} key={index} >

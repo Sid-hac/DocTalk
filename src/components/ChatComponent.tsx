@@ -53,7 +53,7 @@ const ChatComponent = ({ chatId }: Props) => {
 
             {/* messages */}
             <div className="flex-1 overflow-y-scroll" >
-                <MessageList messages={messages} isLoading={isPending} isAiLoading={isLoading}/>
+                <MessageList messages={messages} isLoading={isLoading}/>
 
             </div>
             {/* input */}
