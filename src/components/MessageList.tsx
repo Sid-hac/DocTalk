@@ -45,7 +45,7 @@ const MessageList = ({ messages, isLoading }: Props) => {
 
 
             ))}
-            {isLoading && <div className="w-20 h-14 bg-slate-50 shadow-xl flex justify-center items-center border border-slate-100 rounded-xl" >
+            {isLoading && <div className="w-20 h-14 bg-slate-50 shadow-xl flex justify-center items-center border border-slate-100 rounded-2xl" >
                 <span className="animate-ping inline-flex rounded-full bg-blue-400 opacity-75 w-5 h-5"></span>
             </div>}
 
