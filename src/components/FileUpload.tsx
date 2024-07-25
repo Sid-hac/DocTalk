@@ -69,7 +69,7 @@ const FileUpload = ({classname} : Props) => {
     return (
         <div className={`p-2 bg-white rounded-xl ${classname} `} >
             <div {...getRootProps({
-                className: "border-2 border-dashed rounded-xl cursor-pointer bg-gray-50 py-8 flex justify-center items-center flex-col h-40"
+                className: "border-2 border-dashed rounded-xl cursor-pointer bg-gray-50  flex justify-center items-center flex-col h-36"
             })} >
                 <input {...getInputProps()} className="w-full" />
                 {(uploading || isPending) ? (

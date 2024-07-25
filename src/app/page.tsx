@@ -44,7 +44,11 @@ export default async function Home() {
         <Hero isPro = {isPro} firstChat={firstChat} isAuth={isAuth} />
 
         <section className="flex flex-col justify-center items-center w-full z-10 space-y-10 mt-10" >
-          {!isAuth && <FileUpload classname="w-[50%]" />}
+          {!isAuth &&
+          <div className="card-wrapper w-[50%] h-40" >
+            <FileUpload classname=" card-content " />
+          </div> 
+          }
 
           <div className="mt-10 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:rounded-2xl sm:m-4" >
             <Image src="/highlight.png " width={900} height={600} quality={100} alt="demo" className="rounded-md bg-white p-2 shadow-2xl ring-1 ring-gray-900/10" />
