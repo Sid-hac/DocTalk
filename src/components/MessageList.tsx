@@ -5,7 +5,7 @@ import { Message } from "ai/react"
 import { bool } from "aws-sdk/clients/signer"
 import { Ellipsis, Loader2 } from "lucide-react"
 import { Span } from "next/dist/trace"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 
 type Props = {
@@ -25,7 +25,14 @@ const MessageList = ({ messages, isLoading }: Props) => {
 
     // }
     let lastMessage = messages.length;
+    const messageEndRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, [messages]);
     if (!messages) return <></>
+
+
     return (
         <div className="flex flex-col gap-2 px-4 mb-3" >
             {messages.map((message) => (
@@ -41,6 +48,7 @@ const MessageList = ({ messages, isLoading }: Props) => {
                         {message.content}
 
                     </div>
+                    <div ref={messageEndRef} ></div>
                 </div>
 
 
