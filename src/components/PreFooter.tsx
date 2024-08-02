@@ -1,7 +1,10 @@
+"use client"
+
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion"
 
 
 type Props = {
@@ -10,11 +13,34 @@ type Props = {
 }
 
 const PreFooter = ({ isAuth, firstChatId }: Props) => {
+
+
+  const FadeInAnimationVarient = {
+    initial: {
+      rotate: 0,
+    },
+
+    animate: {
+      rotate: 30,
+      transition: {
+        duration : 1,
+      }
+    }
+  }
+
   return (
 
     <section className=" flex flex-col justify-center items-center w-full h-fit bg-slate-100 border-t border-gray-300 bg-[url('/bg3.svg')] z-10 space-y-10" >
       <div className="flex flex-col gap-6 justify-center items-center mt-10" >
-        <h1 className="text-6xl font-bold text-center tracking-tight" >Unlock Your Potential <br /> With <span className="text-6xl font-bold text-blue-700" >DocTalk</span> </h1>
+        <h1 className="text-6xl font-bold text-center tracking-tight" >Unlock Your Potential <br /> With{" "}
+          <motion.span className="text-6xl font-bold text-blue-700"
+           variants={FadeInAnimationVarient}
+           initial= "initial"
+           whileInView="animate"
+          >
+            DocTalk
+          </motion.span>
+        </h1>
         <p className="text-lg font-semibold" >Don&apos;t miss out on using AI for your work!</p>
       </div>
       <div className="flex justify-center items-center gap-2" >

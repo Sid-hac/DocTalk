@@ -202,10 +202,15 @@ const Features = ({ isAuth, firstChatId }: Props) => {
                                     <BadgeCheck className="w-5 h-5 text-green-500" />
                                     <p>Brainstorm ideas effortlessly</p>
                                 </motion.div>
-                                <div className="flex gap-2" >
+                                <motion.div className="flex gap-2"
+                                    variants={FadeIn2AnimationVarient}
+                                    initial="initial"
+                                    whileInView="animate"
+                                    custom={2}
+                                >
                                     <BadgeCheck className="w-5 h-5 text-green-500" />
                                     <p>Combine insights from multiple PDFs</p>
-                                </div>
+                                </motion.div>
                             </div>
 
                             <div className="flex justify-start items-center" >
